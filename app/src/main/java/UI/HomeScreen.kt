@@ -39,16 +39,19 @@ import kotlinx.coroutines.launch
 
 
 @Composable
+// This function is called from MainActivity.kt
 fun HomeScreenApp(){
-    val viewModel= remember {
+    val viewModel= remember {  //ViewModel that manages UI state
         ChessTimeViewModel()
     }
+
+    // function created to solve "suspend call from non-suspend function" problem
     fun startPlayer1TimeNonSuspend() {
         viewModel.launch {
             viewModel.startPlayer1Time()
         }
     }
-
+    // function created to solve "suspend call from non-suspend function" problem
     fun startPlayer2TimeNonSuspend() {
         viewModel.launch {
             viewModel.startPlayer2Time()
@@ -62,12 +65,12 @@ fun HomeScreenApp(){
         verticalArrangement = Arrangement.SpaceBetween
     ){
 
-
+//Button for player 1-> when clicked time of player 2 starts decrementing
         Button(
     onClick = {
 
         if(viewModel.retrievecurrentPlayer()==1) {
-            viewModel.switchPlayer()
+            viewModel.switchPlayer()//player switch
             startPlayer2TimeNonSuspend()
             viewModel.pausePlayer1Time()
 
@@ -155,7 +158,7 @@ fun HomeScreenApp(){
             shape = customShape,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(350.dp)
+                .height(300.dp)
         )
         {
 

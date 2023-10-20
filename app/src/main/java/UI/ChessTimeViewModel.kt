@@ -24,6 +24,7 @@ class ChessTimeViewModel :ViewModel(), CoroutineScope {
    private suspend fun delayOneSecond(){
        delay(1000)
    }
+
     private val initialTimeInMinutes: Long = 10
     private val initialTimeInSeconds: Long = initialTimeInMinutes * 60
    private var currentPLayer=1
@@ -34,10 +35,12 @@ class ChessTimeViewModel :ViewModel(), CoroutineScope {
         val isPlayer1Running: Boolean=false, // Is player 1's timer running?
         val isPlayer2Running: Boolean=false // Is player 2's timer running?
     )
+
     private var timerState by mutableStateOf(TimerState())
     fun retrieveTimerState(): TimerState {
         return timerState
     }
+
 fun retrievecurrentPlayer():Int{
     return currentPLayer
 }
@@ -69,9 +72,10 @@ fun pausePlayer1Time(){
    }
     private suspend fun updateTimers(currentPlayer: Int) {
         while ((currentPlayer == 1 && timerState.isPlayer1Running) || (currentPlayer == 2 && timerState.isPlayer2Running)) {
+            delayOneSecond()
             if (currentPlayer == 1 && timerState.isPlayer1Running) {
                 // Delay for 1 second before decrementing player 1's time
-                delayOneSecond()
+
                 if (timerState.player1Time > 0) {
                     timerState = timerState.copy(player1Time = timerState.player1Time - 1)
                 } else {
@@ -81,7 +85,7 @@ fun pausePlayer1Time(){
 
             if (currentPlayer == 2 && timerState.isPlayer2Running) {
                 // Delay for 1 second before decrementing player 2's time
-                delayOneSecond()
+
                 if (timerState.player2Time > 0) {
                     timerState = timerState.copy(player2Time = timerState.player2Time - 1)
                 } else {
