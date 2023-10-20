@@ -1,3 +1,4 @@
+import UI.ChessTimeViewModel
 import UI.customShape
 import UI.customTextStyle
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,11 +33,28 @@ import androidx.compose.ui.unit.dp
 import com.example.chessclock.ui.theme.ChessClockTheme
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.ViewModel
 import com.example.chessclock.R
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun HomeScreenApp(){
+    val viewModel= remember {
+        ChessTimeViewModel()
+    }
+    fun startPlayer1TimeNonSuspend() {
+        viewModel.launch {
+            viewModel.startPlayer1Time()
+        }
+    }
+
+    fun startPlayer2TimeNonSuspend() {
+        viewModel.launch {
+            viewModel.startPlayer2Time()
+        }
+    }
+
     Column( // Column1 starts here
         modifier = Modifier
             .fillMaxSize()
@@ -44,7 +64,16 @@ fun HomeScreenApp(){
 
 
         Button(
-    onClick = { /*TODO*/ },
+    onClick = {
+
+        if(viewModel.retrievecurrentPlayer()==1) {
+            viewModel.switchPlayer()
+            startPlayer2TimeNonSuspend()
+            viewModel.pausePlayer1Time()
+
+        }
+
+              },
             shape = customShape,
     modifier = Modifier
         .fillMaxWidth()
@@ -53,18 +82,19 @@ fun HomeScreenApp(){
 )
 {
   Text(
-      text = "10:00",
+      text =viewModel.formatTime(viewModel.retrieveTimerState().player1Time) ,
   style=customTextStyle
   )
 }
-Row(
+
+        Row(
     horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
 ){
     IconButton(
-        onClick = { /* Handle button click here */ },
+        onClick = {  },
         modifier = Modifier.weight(1f)
     ) {
         //Text(text = "Play/Pause")
@@ -114,16 +144,24 @@ Row(
 
 }
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+
+                if(viewModel.retrievecurrentPlayer()==2) {
+                    viewModel.switchPlayer()
+                startPlayer1TimeNonSuspend()
+                viewModel.pausePlayer2Time()
+            }
+                                                    },
             shape = customShape,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(350.dp)
         )
         {
+
             Text(
-                text = "10:00",
-            style =customTextStyle
+                text =viewModel.formatTime(viewModel.retrieveTimerState().player2Time) ,
+                style=customTextStyle
             )
         }
 
