@@ -8,10 +8,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 val customShape: CornerBasedShape = RoundedCornerShape(
-    topStart=10.dp,
-    topEnd = 10.dp,
-    bottomStart =10.dp,
-    bottomEnd =10.dp,
+    topStart=0.dp,
+    topEnd = 0.dp,
+    bottomStart =0.dp,
+    bottomEnd =0.dp,
     )
 val customTextStyle = TextStyle(
     fontSize = 100.sp,

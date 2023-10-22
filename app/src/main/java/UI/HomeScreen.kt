@@ -1,8 +1,7 @@
-import UI.ChessTimeViewModel
-import UI.customShape
-import UI.customTextStyle
+package UI
+
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,30 +11,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.chessclock.ui.theme.ChessClockTheme
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.lifecycle.ViewModel
 import com.example.chessclock.R
 import kotlinx.coroutines.launch
+
+
 
 
 @Composable
@@ -57,6 +53,8 @@ fun HomeScreenApp(){
             viewModel.startPlayer2Time()
         }
     }
+    val red = Color(0xFFFF0000)
+var isPaused:Boolean=false // used for checking whether game is paused or not
 
     Column( // Column1 starts here
         modifier = Modifier
@@ -68,25 +66,31 @@ fun HomeScreenApp(){
 //Button for player 1-> when clicked time of player 2 starts decrementing
         Button(
     onClick = {
+if(isPaused){
 
-        if(viewModel.retrievecurrentPlayer()==1) {
-            viewModel.switchPlayer()//player switch
-            startPlayer2TimeNonSuspend()
-            viewModel.pausePlayer1Time()
+}
+     else {
+    if (viewModel.retrievecurrentPlayer() == 1) {
+        viewModel.switchPlayer()//player switch
+        startPlayer2TimeNonSuspend()
+        viewModel.pausePlayer1Time()
 
-        }
+    }
 
+}
               },
             shape = customShape,
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(300.dp)
 
-)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+
+
+        )
 {
   Text(
       text =viewModel.formatTime(viewModel.retrieveTimerState().player1Time) ,
-  style=customTextStyle
+  style= customTextStyle
   )
 }
 
@@ -97,15 +101,45 @@ fun HomeScreenApp(){
                 .height(50.dp)
 ){
     IconButton(
-        onClick = {  },
+        onClick = {
+               if(viewModel.retrieveTimerState().isPlayer1Running){
+                   viewModel.pausePlayer1Time()
+               isPaused=true
+               }
+        else if(viewModel.retrieveTimerState().isPlayer2Running){
+            viewModel.pausePlayer2Time()
+        isPaused=true
+        }
+                  else{
+                      if(viewModel.retrievecurrentPlayer()==2){
+                          startPlayer2TimeNonSuspend()
+                          isPaused=false
+                      }
+               else if(viewModel.retrievecurrentPlayer()==1){
+                   startPlayer1TimeNonSuspend()
+               isPaused=false
+               }
+                  }
+                  },
         modifier = Modifier.weight(1f)
     ) {
         //Text(text = "Play/Pause")
-        Icon(
-            imageVector= Icons.Default.PlayArrow,
-            contentDescription="Play",
-            modifier=Modifier.size(42.dp)
-        )
+        if (viewModel.retrieveTimerState().isPlayer1Running || viewModel.retrieveTimerState().isPlayer2Running) {
+            Icon(
+                painter = painterResource(id = R.drawable.pause), // Use a custom drawable for the pause icon
+                contentDescription = "Play",
+                modifier = Modifier.size(42.dp)
+            )
+        } else {
+
+
+            Icon(
+                imageVector = Icons.Default.PlayArrow, // Use the built-in play icon
+                contentDescription = "Play",
+                modifier = Modifier.size(42.dp)
+            )
+        }
+
     }
     Spacer(modifier = Modifier.width(1.dp))
     IconButton(
@@ -148,17 +182,21 @@ fun HomeScreenApp(){
 }
         Button(
             onClick = {
+if(isPaused){
 
-                if(viewModel.retrievecurrentPlayer()==2) {
-                    viewModel.switchPlayer()
-                startPlayer1TimeNonSuspend()
-                viewModel.pausePlayer2Time()
-            }
-                                                    },
+}
+                else {
+    if (viewModel.retrievecurrentPlayer() == 2) {
+        viewModel.switchPlayer()
+        startPlayer1TimeNonSuspend()
+        viewModel.pausePlayer2Time()
+    }
+}                                     },
             shape = customShape,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
+
         )
         {
 
@@ -176,7 +214,7 @@ fun HomeScreenApp(){
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    ChessClockTheme {
-        HomeScreenApp()
-    }
+ChessClockTheme() {
+    HomeScreenApp()
+}
 }
