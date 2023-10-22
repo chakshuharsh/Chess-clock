@@ -1,6 +1,6 @@
 package UI
 
-import androidx.compose.foundation.background
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,11 +15,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +33,10 @@ import androidx.compose.ui.unit.dp
 import com.example.chessclock.ui.theme.ChessClockTheme
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogState
+import androidx.compose.ui.window.rememberDialogState
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.chessclock.R
 import kotlinx.coroutines.launch
 
@@ -55,6 +64,12 @@ fun HomeScreenApp(){
     }
     val red = Color(0xFFFF0000)
 var isPaused:Boolean=false // used for checking whether game is paused or not
+//isPaused -> true whn pause button is clicked
+    // isPaused -> false when play button is clicked
+
+
+// WE HAVE NOT USED MUTABLESTATE IN ISPAUSED AND IN RESETDIALOG AS WELL KEEP THAT IN  IND
+
 
     Column( // Column1 starts here
         modifier = Modifier
@@ -101,6 +116,7 @@ if(isPaused){
                 .height(50.dp)
 ){
     IconButton(
+
         onClick = {
                if(viewModel.retrieveTimerState().isPlayer1Running){
                    viewModel.pausePlayer1Time()
@@ -121,6 +137,8 @@ if(isPaused){
                }
                   }
                   },
+
+
         modifier = Modifier.weight(1f)
     ) {
         //Text(text = "Play/Pause")
@@ -131,7 +149,7 @@ if(isPaused){
                 modifier = Modifier.size(42.dp)
             )
         } else {
-
+// we have used painter and imageVector for different play and pause condition
 
             Icon(
                 imageVector = Icons.Default.PlayArrow, // Use the built-in play icon
@@ -143,7 +161,13 @@ if(isPaused){
     }
     Spacer(modifier = Modifier.width(1.dp))
     IconButton(
-        onClick = { /* Handle button click here */ },
+        onClick = {
+            if(viewModel.retrieveTimerState().isPlayer1Running||viewModel.retrieveTimerState().isPlayer2Running){
+              viewModel.stopGame()
+viewModel.retrieveTimerState()
+            }
+
+                  },
         modifier = Modifier.weight(1f)
     ) {
         //Text(text = "Reset")
