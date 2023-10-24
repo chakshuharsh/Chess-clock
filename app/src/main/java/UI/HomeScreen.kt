@@ -1,5 +1,8 @@
 package UI
 
+import Gray
+import android.content.Context
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,22 +23,26 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.chessclock.ui.theme.ChessClockTheme
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import com.example.chessclock.R
 import kotlinx.coroutines.launch
 
-
+fun initializeMediaPlayer(context: Context, resId: Int): MediaPlayer {
+    return MediaPlayer.create(context, resId)
+}
 
 
 @Composable
-// This function is called from MainActivity.kt
 fun HomeScreenApp(){
     val viewModel= remember {  //ViewModel that manages UI state
         ChessTimeViewModel()
@@ -53,7 +60,25 @@ fun HomeScreenApp(){
             viewModel.startPlayer2Time()
         }
     }
-    val red = Color(0xFFFF0000)
+// BELOW IS CODE FOR SOUND WHEN AUDIO BUTTON IS ENABLED
+val soundOn= initializeMediaPlayer(LocalContext.current, R.raw.sound_of_speaker_on)
+    val secondMediaPlayer=remember{
+        soundOn
+    }
+
+
+//BELOW IS CODE FOR TAP SOUND OF BUTTONS OF EACH PLAYER
+    val initializeMediaPlayer =
+        initializeMediaPlayer(LocalContext.current, R.raw.chessclocktapsound)
+    val mediaPlayer = remember {
+        initializeMediaPlayer
+    }
+
+var isSoundOn by remember {
+    mutableStateOf(true)
+}
+
+
 var isPaused:Boolean=false // used for checking whether game is paused or not
 
     Column( // Column1 starts here
@@ -71,6 +96,7 @@ if(isPaused){
 }
      else {
     if (viewModel.retrievecurrentPlayer() == 1) {
+        if(isSoundOn){ mediaPlayer.start()}
         viewModel.switchPlayer()//player switch
         startPlayer2TimeNonSuspend()
         viewModel.pausePlayer1Time()
@@ -84,7 +110,6 @@ if(isPaused){
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
-
 
         )
 {
@@ -168,14 +193,31 @@ if(isPaused){
     Spacer(modifier = Modifier.width(1.dp))
 
     IconButton(
-        onClick = { /* Handle button click here */ },
+        onClick = {
+            if(!isSoundOn){
+                secondMediaPlayer.start()
+            }
+            isSoundOn = !isSoundOn
+
+                  },
         modifier = Modifier.weight(1f)
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.volumeup), // Use Icons.Default.VolumeUp for the volume icon
-            contentDescription = "Sound",
-            modifier = Modifier.size(35.dp)
-        )
+       if(isSoundOn) {
+           Icon(
+               painter = painterResource(id = R.drawable.volumeup), // Use Icons.Default.VolumeUp for the volume icon
+               contentDescription = "Sound",
+               modifier = Modifier.size(35.dp)
+           )
+       }
+        else{
+            Icon(
+                painter= painterResource(id = R.drawable.mute_),
+                contentDescription = "mute",
+                modifier=Modifier.size(35.dp)
+            )
+       }
+
+
     }
 
 
@@ -187,6 +229,8 @@ if(isPaused){
 }
                 else {
     if (viewModel.retrievecurrentPlayer() == 2) {
+
+       if(isSoundOn){ mediaPlayer.start()}
         viewModel.switchPlayer()
         startPlayer1TimeNonSuspend()
         viewModel.pausePlayer2Time()
@@ -196,6 +240,7 @@ if(isPaused){
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
+
 
         )
         {
@@ -214,7 +259,7 @@ if(isPaused){
 @Preview
 @Composable
 fun HomeScreenPreview() {
-ChessClockTheme() {
+
     HomeScreenApp()
-}
+
 }
