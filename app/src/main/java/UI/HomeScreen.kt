@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -115,7 +116,9 @@ if(isPaused){
 {
   Text(
       text =viewModel.formatTime(viewModel.retrieveTimerState().player1Time) ,
-  style= customTextStyle
+      style= customTextStyle,
+      modifier=Modifier.rotate(180f)
+
   )
 }
 
@@ -166,9 +169,15 @@ if(isPaused){
         }
 
     }
-    Spacer(modifier = Modifier.width(1.dp))
+
+            Spacer(modifier = Modifier.width(1.dp))
+
+            //RESET BUTTON
     IconButton(
-        onClick = { /* Handle button click here */ },
+        onClick = {
+            viewModel.stopGame()
+            viewModel.resetTimer()
+                  },
         modifier = Modifier.weight(1f)
     ) {
         //Text(text = "Reset")
@@ -179,8 +188,13 @@ if(isPaused){
         )
     }
     Spacer(modifier = Modifier.width(25.dp))
-    IconButton(
-        onClick = { /* Handle button click here */ },
+
+
+            // Settings Button
+            IconButton(
+        onClick = {
+
+        },
         modifier = Modifier.weight(1f)
     ) {
         //Text(text = "Play/Pause")
@@ -247,7 +261,9 @@ if(isPaused){
 
             Text(
                 text =viewModel.formatTime(viewModel.retrieveTimerState().player2Time) ,
-                style=customTextStyle
+style= customTextStyle
+
+
             )
         }
 

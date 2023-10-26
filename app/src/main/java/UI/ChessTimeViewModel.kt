@@ -49,7 +49,9 @@ fun formatTime(totalSeconds: Long): String{
     val seconds =totalSeconds%60
     return String.format("%02d:%02d", minutes,seconds)
 }
-
+fun resetTimer(){
+    timerState=TimerState()
+}
 suspend fun startPlayer1Time(){
     timerState=timerState.copy(isPlayer1Running=true)
 
@@ -66,7 +68,10 @@ fun pausePlayer1Time(){
     fun pausePlayer2Time(){
         timerState=timerState.copy(isPlayer2Running = false)
     }
-
+fun stopGame(){
+    pausePlayer2Time()
+    pausePlayer1Time()
+}
    fun switchPlayer(){
        currentPLayer=3-currentPLayer
    }
