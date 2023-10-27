@@ -330,10 +330,10 @@ style= customTextStyle
 
 
 
-@Preview
-@Composable
-fun HomeScreenPreview() {
-
-    HomeScreenApp()
-
-}
+//@Preview
+//@Composable
+//fun HomeScreenPreview() {
+//
+//    HomeScreenApp()
+//
+//}
