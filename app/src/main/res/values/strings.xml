@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Chess clock</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="reset_button">Reset the clock?</string>
 </resources>
