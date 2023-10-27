@@ -90,7 +90,9 @@ var isSoundOn by remember {
 }
 
 
-var isPaused:Boolean=false // used for checking whether game is paused or not
+var isPaused by remember {
+    mutableStateOf(false)
+} // used for checking whether game is paused or not
 
     Column( // Column1 starts here
         modifier = Modifier
@@ -186,7 +188,7 @@ if(isPaused){
     IconButton(
         onClick = {
             viewModel.stopGame()
-
+            isPaused=true
             isDialogVisible=true
 
 
@@ -227,7 +229,9 @@ isDialogVisible=false
                         TextButton(
                             onClick = {
                                 viewModel.stopGame()
+                                isPaused=true
                                 isDialogVisible=false
+
                             }
                         ) {
                             Text(text = stringResource(id = R.string.no))
