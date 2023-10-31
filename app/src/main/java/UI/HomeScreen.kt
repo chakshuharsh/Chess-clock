@@ -59,15 +59,6 @@ HomeScreen,
 fun HomeScreenApp(
     navController: NavHostController = rememberNavController()
 ) {
-
-    
-
-
-
-
-
-
-
     val viewModel= remember {  //ViewModel that manages UI state
         ChessTimeViewModel()
     }

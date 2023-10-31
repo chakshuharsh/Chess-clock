@@ -69,7 +69,7 @@ fun TimeOptionButton(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimerControls(navController: NavController){// Name is not appropriate
+fun TimerControls(navController: NavController, viewModel: ChessTimeViewModel){// Name is not appropriate
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())// the appbar remains inplace and does not react to scrolling
 
 //    navController: NavHostController = rememberNavController()
@@ -96,7 +96,7 @@ fun TimerControls(navController: NavController){// Name is not appropriate
 
 
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.navigate(Screen.HomeScreen.name) }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Returning to homescreen"
