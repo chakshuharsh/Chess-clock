@@ -18,14 +18,14 @@ val customTextStyle = TextStyle(// for timer -> HomeScreen
     fontWeight = FontWeight.Bold
 )
 
-val startShape:CornerBasedShape=RoundedCornerShape(// for start button -> TimerControl
-    topStart = 5.dp,
-    topEnd = 5.dp,
-    bottomStart = 5.dp,
-    bottomEnd = 5.dp,
+val startShape:CornerBasedShape=RoundedCornerShape(// for start button -> TimerControl at bottom bar
+    topStart = 8.dp,
+    topEnd = 8.dp,
+    bottomStart = 8.dp,
+    bottomEnd = 8.dp,
 )
 
-val customTextStyleforstart = TextStyle(// for timer -> HomeScreen
+val customTextStyleforstart = TextStyle(// for Start button -> TimerControl at bottom bar
     fontSize = 30.sp,
     fontWeight = FontWeight.Bold
 )

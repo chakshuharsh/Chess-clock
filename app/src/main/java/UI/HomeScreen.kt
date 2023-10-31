@@ -4,7 +4,6 @@ import Gray
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,14 +31,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.chessclock.R
 import kotlinx.coroutines.launch
 
@@ -48,8 +48,26 @@ fun initializeMediaPlayer(context: Context, resId: Int): MediaPlayer {
 }
 
 
+
+enum class Screen{
+HomeScreen,
+    TimerControl
+}
+
+
 @Composable
-fun HomeScreenApp(){
+fun HomeScreenApp(
+    navController: NavHostController = rememberNavController()
+) {
+
+    
+
+
+
+
+
+
+
     val viewModel= remember {  //ViewModel that manages UI state
         ChessTimeViewModel()
     }
@@ -247,7 +265,8 @@ isDialogVisible=false
             // Settings Button
             IconButton(
         onClick = {
-
+viewModel.stopGame()
+            navController.navigate(Screen.TimerControl.name)
         },
         modifier = Modifier.weight(1f)
     ) {

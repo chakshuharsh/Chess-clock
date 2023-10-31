@@ -4,4 +4,5 @@
     <string name="no">No</string>
     <string name="reset_button">Reset the clock?</string>
     <string name="start">Start</string>
+    <string name="newbutton">+ New Custom Button</string>
 </resources>

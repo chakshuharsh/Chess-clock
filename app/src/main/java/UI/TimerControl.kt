@@ -1,11 +1,14 @@
 package UI
-
+// This is Timer control screen of app
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
@@ -13,17 +16,21 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 
+
 import androidx.compose.material3.ExperimentalMaterial3Api
+
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,15 +39,40 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.chessclock.R
 import com.example.chessclock.R.string.start
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.minutes
+
+@OptIn(ExperimentalMaterial3Api::class)
+
+
+@Composable
+fun TimeOptionButton(
+    obj: TimeOption,
+
+
+    ) {
+
+    Button(
+
+        onClick = { /*TODO*/ }
+    ){
+        Text(text = "${obj.minutes} min")
+    }
+}
+
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScaffoldExample(){// Name is not appropriate
+fun TimerControls(navController: NavController){// Name is not appropriate
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())// the appbar remains inplace and does not react to scrolling
 
-
+//    navController: NavHostController = rememberNavController()
 
 
     Scaffold(
@@ -64,7 +96,7 @@ fun ScaffoldExample(){// Name is not appropriate
 
 
                 navigationIcon = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Returning to homescreen"
@@ -90,14 +122,14 @@ fun ScaffoldExample(){// Name is not appropriate
                 scrollBehavior = scrollBehavior,
             )
         },
-
         bottomBar = {
-            BottomAppBar {
-                (
-                       Button(
+            BottomAppBar(
+                contentColor = Color.White, // Set your content color
+            ){
+                Button(
                            onClick = {},
                            shape= startShape,
-                           modifier=Modifier
+                           modifier= Modifier
                                .weight(1f)
                                .height(60.dp)
 
@@ -108,27 +140,42 @@ fun ScaffoldExample(){// Name is not appropriate
                            style= customTextStyleforstart
                            )
                        }
-                )
             }
-        }
+        } // Scrolling behaviour in bottom bar is pending
     )
     { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "This is your placeholder content")
-        }
+            OutlinedButton(
+                onClick = { }
+            ) {
+                Text(text = stringResource(id = R.string.newbutton)) // we need concatenation of two string "+" and " New Custom button" for different colors
+
+            }
+LazyColumn{
+    items(timeOption.size
+    ){index->
+        TimeOptionButton(timeOption[index])
     }
 }
 
-@Preview
-@Composable
-fun ScaffoldExamplePreview() {
 
-    ScaffoldExample()
+    }
+}
+
 
 }
+
+
+//@Preview
+//@Composable
+//fun ScaffoldExamplePreview() {
+//
+//    TimerControls(navController)
+//
+//}
