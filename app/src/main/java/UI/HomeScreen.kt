@@ -57,11 +57,9 @@ HomeScreen,
 
 @Composable
 fun HomeScreenApp(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(), viewModel: ChessTimeViewModel
 ) {
-    val viewModel= remember {  //ViewModel that manages UI state
-        ChessTimeViewModel()
-    }
+
 
     // function created to solve "suspend call from non-suspend function" problem
     fun startPlayer1TimeNonSuspend() {

@@ -37,10 +37,10 @@ class MainActivity : ComponentActivity() {
                 },
                 exitTransition = { ExitTransition.None }
             ) {
-                composable(Screen.HomeScreen.name,
+                composable(Screen.HomeScreen.name)
 
-                    ) {
-                    HomeScreenApp(navController)
+                     {
+                    HomeScreenApp(navController,viewModel)
 
                 }
 
