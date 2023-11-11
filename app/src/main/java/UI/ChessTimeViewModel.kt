@@ -1,9 +1,11 @@
 package UI
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -13,25 +15,33 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 
-private val initialTimeInMinutes: Long = 10
-private val initialTimeInSeconds: Long = initialTimeInMinutes * 60
+private const val initialTimeInMinutesDefault: Long = 10
+private const val initialTimeInSecondsDefault: Long = initialTimeInMinutesDefault * 60
+
+
+
+
 
 class ChessTimeViewModel :ViewModel(), CoroutineScope {
+    var selectedTimeInMinutes:Long by mutableLongStateOf(10)
+
     private val job= Job()
     override val coroutineContext: CoroutineContext = Dispatchers.Main+job
 
+
+    val initialTimeInMinutes: Long = selectedTimeInMinutes
+    val initialTimeInSeconds: Long = initialTimeInMinutes * 60
+    private var currentPLayer=1
 
    private suspend fun delayOneSecond(){
        delay(1000)
    }
 
-    private val initialTimeInMinutes: Long = 10
-    private val initialTimeInSeconds: Long = initialTimeInMinutes * 60
-   private var currentPLayer=1
+
 
     data class TimerState(
-        val player1Time: Long = initialTimeInSeconds, // Time remaining for player 1 in seconds
-        val player2Time: Long = initialTimeInSeconds, // Time remaining for player 2 in seconds
+        val player1Time: Long= initialTimeInSecondsDefault , // Time remaining for player 1 in seconds
+        val player2Time: Long=initialTimeInSecondsDefault , // Time remaining for player 2 in seconds
         val isPlayer1Running: Boolean=false, // Is player 1's timer running?
         val isPlayer2Running: Boolean=false // Is player 2's timer running?
     )
@@ -40,6 +50,15 @@ class ChessTimeViewModel :ViewModel(), CoroutineScope {
     fun retrieveTimerState(): TimerState {
         return timerState
     }
+
+
+
+
+
+
+fun setSelectedTimeInMinutes(minutes:Int){
+    selectedTimeInMinutes= minutes.toLong()
+}
 
 fun retrievecurrentPlayer():Int{
     return currentPLayer
@@ -50,7 +69,7 @@ fun formatTime(totalSeconds: Long): String{
     return String.format("%02d:%02d", minutes,seconds)
 }
 fun resetTimer(){
-    timerState=TimerState()
+    timerState=timerState.copy(player2Time = selectedTimeInMinutes, player1Time = selectedTimeInMinutes)
 }
 suspend fun startPlayer1Time(){
     timerState=timerState.copy(isPlayer1Running=true)
