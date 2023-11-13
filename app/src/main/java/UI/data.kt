@@ -7,6 +7,8 @@ val timeOption= listOf(
     TimeOption(3),
     TimeOption(5),
     TimeOption(10),
-    TimeOption(15)
+    TimeOption(15),
+    TimeOption(20),
+    TimeOption(30)
 
 )

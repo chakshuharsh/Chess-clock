@@ -29,8 +29,8 @@ class ChessTimeViewModel :ViewModel(), CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.Main+job
 
 
-    val initialTimeInMinutes: Long = selectedTimeInMinutes
-    val initialTimeInSeconds: Long = initialTimeInMinutes * 60
+    val initialTimeInMinutes: Long get() = selectedTimeInMinutes
+    val initialTimeInSeconds: Long get() = initialTimeInMinutes * 60
     private var currentPLayer=1
 
    private suspend fun delayOneSecond(){
@@ -68,7 +68,7 @@ fun formatTime(totalSeconds: Long): String{
     val seconds =totalSeconds%60
     return String.format("%02d:%02d", minutes,seconds)
 }
-fun resetTimer(){
+fun resetTimer(){//Never Used
     timerState=timerState.copy(player2Time = selectedTimeInMinutes, player1Time = selectedTimeInMinutes)
 }
 suspend fun startPlayer1Time(){

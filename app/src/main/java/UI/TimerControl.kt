@@ -60,13 +60,15 @@ import kotlin.time.minutes
 @Composable
 fun TimeOptionButton(
     obj: TimeOption,
-viewModel: ChessTimeViewModel
+viewModel: ChessTimeViewModel,
+
     )
 {
 
     Button(
         onClick = {
-           viewModel.setSelectedTimeInMinutes(obj.minutes)
+
+            viewModel.setSelectedTimeInMinutes(obj.minutes)
         }
     ){
         Text(text = "${obj.minutes} min")
@@ -80,7 +82,7 @@ viewModel: ChessTimeViewModel
 @Composable
 fun TimerControls(navController: NavController, viewModel: ChessTimeViewModel){// Name is not appropriate
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())// the appbar remains inplace and does not react to scrolling
-var timeSelected:Int by remember { mutableIntStateOf(10) }
+var timeSelected by remember { mutableIntStateOf(10) }
 //    navController: NavHostController = rememberNavController()
 
 
@@ -136,7 +138,10 @@ var timeSelected:Int by remember { mutableIntStateOf(10) }
                 contentColor = Color.White, // Set your content color
             ){
                 Button(
-                           onClick = {navController.navigate(Screen.HomeScreen.name)},
+                           onClick = {
+                               navController.navigate(Screen.HomeScreen.name)
+                               viewModel.resetTimers()
+                                     },
                            shape= startShape,
                            modifier= Modifier
                                .weight(1f)
