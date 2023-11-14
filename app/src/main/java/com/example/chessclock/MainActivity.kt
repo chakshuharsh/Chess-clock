@@ -3,6 +3,7 @@ package com.example.chessclock
 import UI.ChessTimeViewModel
 import UI.HomeScreenApp
 import UI.Screen
+import UI.TimeOption
 import UI.TimerControls
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
                                       },
                     exitTransition = { ExitTransition.None }
                 ) {
-                    TimerControls(navController,viewModel)
+                    TimerControls(navController,viewModel, TimeOption(0))
 
                 }
             }

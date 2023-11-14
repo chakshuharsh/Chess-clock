@@ -24,11 +24,11 @@ private const val initialTimeInSecondsDefault: Long = initialTimeInMinutesDefaul
 
 class ChessTimeViewModel :ViewModel(), CoroutineScope {
     var selectedTimeInMinutes:Long by mutableLongStateOf(10)
-
+var incrementTimeInSeconds:Long by mutableLongStateOf(0)
     private val job= Job()
     override val coroutineContext: CoroutineContext = Dispatchers.Main+job
 
-
+    val initialIncrementTime:Long get()= incrementTimeInSeconds
     val initialTimeInMinutes: Long get() = selectedTimeInMinutes
     val initialTimeInSeconds: Long get() = initialTimeInMinutes * 60
     private var currentPLayer=1

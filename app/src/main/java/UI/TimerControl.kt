@@ -1,11 +1,13 @@
 package UI
 // This is Timer control screen of app
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.runtime.*
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -55,7 +57,7 @@ import kotlin.time.minutes
 
 @OptIn(ExperimentalMaterial3Api::class)
 
-
+var timeSelected:Int=10
 
 @Composable
 fun TimeOptionButton(
@@ -64,15 +66,39 @@ viewModel: ChessTimeViewModel,
 
     )
 {
+    var selected by remember { mutableStateOf(false) }
 
-    Button(
-        onClick = {
-
-            viewModel.setSelectedTimeInMinutes(obj.minutes)
-        }
-    ){
-        Text(text = "${obj.minutes} min")
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = "${obj.minutes} min",
+            modifier = Modifier.clickable {
+                selected = !selected
+                timeSelected=obj.minutes
+                if (selected) {
+                    viewModel.setSelectedTimeInMinutes(obj.minutes)
+                }
+            }
+        )
+        Spacer(modifier = Modifier.width(200.dp))
+        RadioButton(
+            selected = selected,
+            onClick = {
+               timeSelected=obj.minutes
+                selected = !selected
+                if (selected) {
+                    viewModel.setSelectedTimeInMinutes(obj.minutes)
+                }
+            }
+        )
     }
+
+
+
+
+
 }
 
 
@@ -80,9 +106,9 @@ viewModel: ChessTimeViewModel,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimerControls(navController: NavController, viewModel: ChessTimeViewModel){// Name is not appropriate
+fun TimerControls(navController: NavController, viewModel: ChessTimeViewModel, obj: TimeOption){// Name is not appropriate
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())// the appbar remains inplace and does not react to scrolling
-var timeSelected by remember { mutableIntStateOf(10) }
+
 //    navController: NavHostController = rememberNavController()
 
 
@@ -139,8 +165,10 @@ var timeSelected by remember { mutableIntStateOf(10) }
             ){
                 Button(
                            onClick = {
-                               navController.navigate(Screen.HomeScreen.name)
+                              viewModel.setSelectedTimeInMinutes(timeSelected)
                                viewModel.resetTimers()
+                               navController.navigate(Screen.HomeScreen.name)
+
                                      },
                            shape= startShape,
                            modifier= Modifier
