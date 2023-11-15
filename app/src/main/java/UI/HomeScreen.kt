@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -101,6 +102,9 @@ var isPaused by remember {
     mutableStateOf(false)
 } // used for checking whether game is paused or not
 
+
+
+
     Column( // Column1 starts here
         modifier = Modifier
             .fillMaxSize()
@@ -116,7 +120,9 @@ if(isPaused){
 }
      else {
     if (viewModel.retrievecurrentPlayer() == 1) {
+        viewModel.increaseMove1()
         if(isSoundOn){ mediaPlayer.start()}
+       viewModel.incrementTimeForPLayer1()
         viewModel.switchPlayer()//player switch
         startPlayer2TimeNonSuspend()
         viewModel.pausePlayer1Time()
@@ -133,13 +139,27 @@ if(isPaused){
 
         )
 {
-  Text(
-      text =viewModel.formatTime(viewModel.retrieveTimerState().player1Time) ,
-      style= customTextStyle,
-      modifier=Modifier.rotate(180f)
 
-  )
-}
+Column() {
+    Text(
+        text =viewModel.formatTime(viewModel.retrieveTimerState().player1Time) ,
+        style= customTextStyle,
+        modifier=Modifier.rotate(180f)
+
+    )
+    Spacer(modifier = Modifier.width(100.dp))
+   Row() {
+       Text(
+           text = "Moves :"
+       )
+
+       Text(
+           text = "${viewModel.move1}"
+       )
+   }
+   }
+
+        }
 
         Row(
     horizontalArrangement = Arrangement.SpaceBetween,
@@ -305,13 +325,19 @@ if(isPaused){
 }
                 else {
     if (viewModel.retrievecurrentPlayer() == 2) {
-
+viewModel.increaseMove2()
        if(isSoundOn){ mediaPlayer.start()}
+       viewModel.incrementTimeForPLayer2()
         viewModel.switchPlayer()
         startPlayer1TimeNonSuspend()
         viewModel.pausePlayer2Time()
     }
-}                                     },
+}
+
+
+
+
+                      },
             shape = customShape,
             modifier = Modifier
                 .fillMaxWidth()
@@ -321,12 +347,26 @@ if(isPaused){
         )
         {
 
-            Text(
-                text =viewModel.formatTime(viewModel.retrieveTimerState().player2Time) ,
-style= customTextStyle
+           Column() {
+               Text(
+                   text =viewModel.formatTime(viewModel.retrieveTimerState().player2Time) ,
+                   style= customTextStyle
+
+               )
+               Spacer(modifier = Modifier.width(100.dp))
+Row() {
+    Text(
+        text = "Moves :"
+    )
+
+    Text(
+        text = "${viewModel.move2}"
+    )
+}
+           }
 
 
-            )
+
         }
 
    //Column1 Ends here

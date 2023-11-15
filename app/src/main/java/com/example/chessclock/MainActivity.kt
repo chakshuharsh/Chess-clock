@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                                       },
                     exitTransition = { ExitTransition.None }
                 ) {
-                    TimerControls(navController,viewModel, TimeOption(0))
+                    TimerControls(navController,viewModel, TimeOption(0,0))
 
                 }
             }

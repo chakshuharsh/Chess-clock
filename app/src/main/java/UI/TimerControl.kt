@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -58,6 +59,7 @@ import kotlin.time.minutes
 @OptIn(ExperimentalMaterial3Api::class)
 
 var timeSelected:Int=10
+var increment:Int=0
 
 @Composable
 fun TimeOptionButton(
@@ -72,25 +74,48 @@ viewModel: ChessTimeViewModel,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        val textContent=if (obj.seconds == 0) {
+            "${obj.minutes} min"
+        } else {
+            "${obj.minutes} min | ${obj.seconds} sec"
+        }
+
         Text(
-            text = "${obj.minutes} min",
+//            "${obj.minutes} min"
+          text=textContent,
+
             modifier = Modifier.clickable {
                 selected = !selected
                 timeSelected=obj.minutes
-                if (selected) {
-                    viewModel.setSelectedTimeInMinutes(obj.minutes)
-                }
+increment=obj.seconds
+            //                if (selected) {
+//                    viewModel.setSelectedTimeInMinutes(obj.minutes)
+//                }
             }
         )
-        Spacer(modifier = Modifier.width(200.dp))
+       if(obj.seconds!=0&&obj.minutes<10){ Spacer(modifier = Modifier.width(185.dp))}
+       else if(obj.seconds!=0){
+           Spacer(modifier = Modifier.width(168.dp))
+       }
+       else if(obj.minutes>9){
+           Spacer(modifier = Modifier.width(222.dp))
+       }
+
+       else{
+            Spacer(modifier=Modifier.width(230.dp))
+       }
+
+
+
         RadioButton(
             selected = selected,
             onClick = {
                timeSelected=obj.minutes
                 selected = !selected
-                if (selected) {
-                    viewModel.setSelectedTimeInMinutes(obj.minutes)
-                }
+                increment=obj.seconds
+//                if (selected) {
+//                    viewModel.setSelectedTimeInMinutes(obj.minutes)
+//                }
             }
         )
     }
@@ -165,7 +190,7 @@ fun TimerControls(navController: NavController, viewModel: ChessTimeViewModel, o
             ){
                 Button(
                            onClick = {
-                              viewModel.setSelectedTimeInMinutes(timeSelected)
+                              viewModel.setSelectedTimeInMinutes(timeSelected, increment)
                                viewModel.resetTimers()
                                navController.navigate(Screen.HomeScreen.name)
 

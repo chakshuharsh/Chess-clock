@@ -1,6 +1,7 @@
 package UI
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -23,12 +24,15 @@ private const val initialTimeInSecondsDefault: Long = initialTimeInMinutesDefaul
 
 
 class ChessTimeViewModel :ViewModel(), CoroutineScope {
-    var selectedTimeInMinutes:Long by mutableLongStateOf(10)
+    private var selectedTimeInMinutes:Long by mutableLongStateOf(10)
 var incrementTimeInSeconds:Long by mutableLongStateOf(0)
+var move1 by mutableIntStateOf(0)
+    var move2 by mutableIntStateOf(0)
+
     private val job= Job()
     override val coroutineContext: CoroutineContext = Dispatchers.Main+job
 
-    val initialIncrementTime:Long get()= incrementTimeInSeconds
+
     val initialTimeInMinutes: Long get() = selectedTimeInMinutes
     val initialTimeInSeconds: Long get() = initialTimeInMinutes * 60
     private var currentPLayer=1
@@ -56,9 +60,19 @@ var incrementTimeInSeconds:Long by mutableLongStateOf(0)
 
 
 
-fun setSelectedTimeInMinutes(minutes:Int){
+fun setSelectedTimeInMinutes(minutes:Int,increment:Int){
     selectedTimeInMinutes= minutes.toLong()
+    incrementTimeInSeconds=increment.toLong()
 }
+
+
+    fun increaseMove1(){
+        move1+=1
+    }
+
+    fun increaseMove2(){
+        move2+=1
+    }
 
 fun retrievecurrentPlayer():Int{
     return currentPLayer
@@ -87,6 +101,16 @@ fun pausePlayer1Time(){
     fun pausePlayer2Time(){
         timerState=timerState.copy(isPlayer2Running = false)
     }
+
+    fun incrementTimeForPLayer1(){
+        timerState=timerState.copy(player1Time =incrementTimeInSeconds+timerState.player1Time)
+    }
+
+    fun incrementTimeForPLayer2(){
+        timerState=timerState.copy(player2Time =incrementTimeInSeconds+timerState.player2Time)
+    }
+
+
 fun stopGame(){
     pausePlayer2Time()
     pausePlayer1Time()
@@ -127,6 +151,9 @@ fun stopGame(){
         isPlayer1Running = false,
         isPlayer2Running = false
     )
-}
+
+    move1=0
+        move2=0
+    }
 
 }
