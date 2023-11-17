@@ -120,7 +120,9 @@ if(isPaused){
 }
      else {
     if (viewModel.retrievecurrentPlayer() == 1) {
+       if(viewModel.move2>=1){
         viewModel.increaseMove1()
+       }
         if(isSoundOn){ mediaPlayer.start()}
        viewModel.incrementTimeForPLayer1()
         viewModel.switchPlayer()//player switch
