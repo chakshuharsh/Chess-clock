@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 
@@ -33,6 +34,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -133,7 +135,9 @@ increment=obj.seconds
 @Composable
 fun TimerControls(navController: NavController, viewModel: ChessTimeViewModel, obj: TimeOption){// Name is not appropriate
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())// the appbar remains inplace and does not react to scrolling
-
+var isDialogvisibleTimerScreen:Boolean by remember{
+    mutableStateOf(false)
+}
 //    navController: NavHostController = rememberNavController()
 
 
@@ -190,9 +194,10 @@ fun TimerControls(navController: NavController, viewModel: ChessTimeViewModel, o
             ){
                 Button(
                            onClick = {
-                              viewModel.setSelectedTimeInMinutes(timeSelected, increment)
-                               viewModel.resetTimers()
-                               navController.navigate(Screen.HomeScreen.name)
+                              isDialogvisibleTimerScreen=true
+//                               viewModel.setSelectedTimeInMinutes(timeSelected, increment)
+//                               viewModel.resetTimers()
+//                               navController.navigate(Screen.HomeScreen.name)
 
                                      },
                            shape= startShape,
@@ -206,7 +211,7 @@ fun TimerControls(navController: NavController, viewModel: ChessTimeViewModel, o
                                text = stringResource(id = start),
                            style= customTextStyleforstart
                            )
-                       }
+                       } // Start Button text
             }
         } // Scrolling behaviour in bottom bar is pending
     )
@@ -234,7 +239,54 @@ LazyColumn{
 
 
     }
-}
+
+        if(isDialogvisibleTimerScreen) {
+            AlertDialog(
+
+
+                text = {
+                    Text(text = stringResource(id = R.string.reset_button))
+                },
+                onDismissRequest = {
+                    isDialogvisibleTimerScreen=false
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.resetTimers()
+                            isDialogvisibleTimerScreen=false
+
+                            viewModel.setSelectedTimeInMinutes(timeSelected, increment)
+                            viewModel.resetTimers()
+                            navController.navigate(Screen.HomeScreen.name)
+                        }
+                    ) {
+                        Text(text = stringResource(id = R.string.yes))
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.stopGame()
+
+                            isDialogvisibleTimerScreen=false
+
+                        }
+                    ) {
+                        Text(text = stringResource(id = R.string.no))
+                    }
+                }
+            )
+        }
+
+
+
+
+
+
+
+
+    } // Column of outlined button and timer options
 
 
 }
