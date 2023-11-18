@@ -21,21 +21,27 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonColors
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -46,6 +52,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 
 import androidx.compose.ui.tooling.preview.Preview
@@ -85,8 +92,10 @@ viewModel: ChessTimeViewModel,
         Text(
 //            "${obj.minutes} min"
           text=textContent,
-
-            modifier = Modifier.clickable {
+color=Color.White,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .clickable {
                 selected = !selected
                 timeSelected=obj.minutes
 increment=obj.seconds
@@ -94,6 +103,7 @@ increment=obj.seconds
 //                    viewModel.setSelectedTimeInMinutes(obj.minutes)
 //                }
             }
+
         )
        if(obj.seconds!=0&&obj.minutes<10){ Spacer(modifier = Modifier.width(185.dp))}
        else if(obj.seconds!=0){
@@ -111,6 +121,11 @@ increment=obj.seconds
 
         RadioButton(
             selected = selected,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = Color.Green,
+                unselectedColor = Color.White
+
+            ),
             onClick = {
                timeSelected=obj.minutes
                 selected = !selected
@@ -142,43 +157,57 @@ var isDialogvisibleTimerScreen:Boolean by remember{
 
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
 
+containerColor = Color.Black,
         topBar = {
             TopAppBar(
 
+                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Black),
 
-
-                modifier = Modifier.background(Color.Black), // Set background color
+                // Set background color
 
 
                         title = {
-                    Text(
+
+                            Text(
                         "Time Controls",
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                        overflow = TextOverflow.Ellipsis,
+                    color=Color.White,
+                                fontWeight=FontWeight.Bold
+                            )
                 },
 
 
+
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate(Screen.HomeScreen.name) }) {
+                    IconButton(
+                        colors = IconButtonDefaults.filledIconButtonColors( contentColor = Color.White, containerColor = Color.Black),
+                        onClick = { navController.navigate(Screen.HomeScreen.name) }
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Returning to homescreen"
+
                         )
                     }
                 },
 
 
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(
+                        colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color.Black, contentColor = Color.White),
+                        onClick = { /* do something */ }) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = "Edit presets"
                         )
                     }
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(
+                        colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color.Black, contentColor = Color.White),
+                        onClick = { /* do something */ }) {
                         Icon(
                             imageVector = Icons.Filled.Settings,
                             contentDescription = "Settings"
@@ -190,9 +219,12 @@ var isDialogvisibleTimerScreen:Boolean by remember{
         },
         bottomBar = {
             BottomAppBar(
-                contentColor = Color.White, // Set your content color
+                containerColor = Color.Black
+
+                // Set your content color
             ){
                 Button(
+                    colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Blue),
                            onClick = {
                               isDialogvisibleTimerScreen=true
 //                               viewModel.setSelectedTimeInMinutes(timeSelected, increment)
@@ -204,17 +236,21 @@ var isDialogvisibleTimerScreen:Boolean by remember{
                            modifier= Modifier
                                .weight(1f)
                                .height(60.dp)
+                               .background(Color.Black)
 
 
                        ){
                            Text(
+                              color=Color.White,
                                text = stringResource(id = start),
-                           style= customTextStyleforstart
+                           style= customTextStyleforstart,
+                               fontWeight = FontWeight.ExtraBold
                            )
                        } // Start Button text
             }
         } // Scrolling behaviour in bottom bar is pending
     )
+
     { innerPadding ->
         Column(
             modifier = Modifier
@@ -223,10 +259,17 @@ var isDialogvisibleTimerScreen:Boolean by remember{
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.width(4.dp))
+
             OutlinedButton(
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Blue),
                 onClick = { }
             ) {
-                Text(text = stringResource(id = R.string.newbutton)) // we need concatenation of two string "+" and " New Custom button" for different colors
+                Text(
+                    text = stringResource(id = R.string.newbutton),
+                    color=Color.White
+
+                ) // we need concatenation of two string "+" and " New Custom button" for different colors
 
             }
             Spacer(modifier = Modifier.width(1.dp))
