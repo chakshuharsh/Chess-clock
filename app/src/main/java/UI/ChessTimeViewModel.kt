@@ -35,7 +35,7 @@ var move1 by mutableIntStateOf(0)
 
     val initialTimeInMinutes: Long get() = selectedTimeInMinutes
     val initialTimeInSeconds: Long get() = initialTimeInMinutes * 60
-    private var currentPLayer=1
+    var currentPLayer=1
 
    private suspend fun delayOneSecond(){
        delay(1000)
@@ -74,9 +74,9 @@ fun setSelectedTimeInMinutes(minutes:Int,increment:Int){
         move2+=1
     }
 
-fun retrievecurrentPlayer():Int{
-    return currentPLayer
-}
+//fun retrievecurrentPlayer():Int{
+//    return currentPLayer
+//}
 fun formatTime(totalSeconds: Long): String{
     val minutes=totalSeconds/60
     val seconds =totalSeconds%60
@@ -120,11 +120,14 @@ fun stopGame(){
    }
     private suspend fun updateTimers(currentPlayer: Int) {
         while ((currentPlayer == 1 && timerState.isPlayer1Running) || (currentPlayer == 2 && timerState.isPlayer2Running)) {
-            delayOneSecond()
+
+                delayOneSecond()
+
             if (currentPlayer == 1 && timerState.isPlayer1Running) {
                 // Delay for 1 second before decrementing player 1's time
 
                 if (timerState.player1Time > 0) {
+
                     timerState = timerState.copy(player1Time = timerState.player1Time - 1)
                 } else {
                     timerState = timerState.copy(isPlayer1Running = false)
@@ -135,6 +138,7 @@ fun stopGame(){
                 // Delay for 1 second before decrementing player 2's time
 
                 if (timerState.player2Time > 0) {
+
                     timerState = timerState.copy(player2Time = timerState.player2Time - 1)
                 } else {
                     timerState = timerState.copy(isPlayer2Running = false)

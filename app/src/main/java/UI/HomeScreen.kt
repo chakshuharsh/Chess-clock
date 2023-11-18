@@ -1,9 +1,11 @@
 package UI
 
 import Gray
+import Saffron
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +22,10 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -32,6 +36,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
@@ -103,42 +109,49 @@ var isPaused by remember {
 } // used for checking whether game is paused or not
 
 
-
-
     Column( // Column1 starts here
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+//            .padding(16.dp)
+            .background(color=Color.Black),
         verticalArrangement = Arrangement.SpaceBetween
     ){
 
 //Button for player 1-> when clicked time of player 2 starts decrementing
         Button(
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Black,),
     onClick = {
 if(isPaused){
 
 }
      else {
-    if (viewModel.retrievecurrentPlayer() == 1) {
-       if(viewModel.move2>=1){
-        viewModel.increaseMove1()
-       }
+    if (viewModel.currentPLayer == 1) {
         if(isSoundOn){ mediaPlayer.start()}
-       viewModel.incrementTimeForPLayer1()
-        viewModel.switchPlayer()//player switch
-        startPlayer2TimeNonSuspend()
         viewModel.pausePlayer1Time()
+        viewModel.incrementTimeForPLayer1()//increment time = 0  where increment is not selected but function call would take place
+        startPlayer2TimeNonSuspend()
+       viewModel.switchPlayer()
+
+       //player switch
+        if(viewModel.move2>=1){
+            viewModel.increaseMove1()
+        }
+
+
+
+
+
+
 
     }
 
 }
               },
             shape = customShape,
-
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
-
+                .background(color=Color.DarkGray)
         )
 {
 
@@ -161,15 +174,17 @@ Column() {
    }
    }
 
-        }
+        }// First Player
 
         Row(
     horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
+                .background(color=Color.Black)
 ){
     IconButton(
+        colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color.Black, contentColor = Color.LightGray),
         onClick = {
                if(viewModel.retrieveTimerState().isPlayer1Running){
                    viewModel.pausePlayer1Time()
@@ -180,17 +195,20 @@ Column() {
         isPaused=true
         }
                   else{
-                      if(viewModel.retrievecurrentPlayer()==2){
+                      if(viewModel.currentPLayer==2){
                           startPlayer2TimeNonSuspend()
                           isPaused=false
                       }
-               else if(viewModel.retrievecurrentPlayer()==1){
+               else if(viewModel.currentPLayer==1){
                    startPlayer1TimeNonSuspend()
                isPaused=false
                }
                   }
                   },
-        modifier = Modifier.weight(1f)
+        modifier = Modifier
+            .weight(1f)
+            .background(color=Color.Black)
+
     ) {
         //Text(text = "Play/Pause")
         if (viewModel.retrieveTimerState().isPlayer1Running || viewModel.retrieveTimerState().isPlayer2Running) {
@@ -198,6 +216,7 @@ Column() {
                 painter = painterResource(id = R.drawable.pause), // Use a custom drawable for the pause icon
                 contentDescription = "Play",
                 modifier = Modifier.size(42.dp)
+
             )
         } else {
 
@@ -215,6 +234,7 @@ Column() {
 
             //RESET BUTTON
     IconButton(
+        colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color.Black, contentColor = Color.LightGray),
         onClick = {
             viewModel.stopGame()
             isPaused=true
@@ -235,8 +255,6 @@ Column() {
 
             if(isDialogVisible) {
                 AlertDialog(
-
-
                     text = {
                         Text(text = stringResource(id = R.string.reset_button))
                     },
@@ -266,6 +284,7 @@ isDialogVisible=false
                             Text(text = stringResource(id = R.string.no))
                         }
                     }
+
                 )
             }
 
@@ -275,7 +294,8 @@ isDialogVisible=false
 
             // Settings Button
             IconButton(
-        onClick = {
+                colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color.Black, contentColor = Color.LightGray),
+                onClick = {
 viewModel.stopGame()
             navController.navigate(Screen.TimerControl.name)
         },
@@ -291,6 +311,7 @@ viewModel.stopGame()
     Spacer(modifier = Modifier.width(1.dp))
 
     IconButton(
+        colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color.Black, contentColor = Color.LightGray),
         onClick = {
             if(!isSoundOn){
                 secondMediaPlayer.start()
@@ -319,14 +340,22 @@ viewModel.stopGame()
     }
 
 
-}
+} // Play/Pause+Reset+Settings+Sound
+
+
+
+
+
+
+
         Button(
-            onClick = {
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Black),
+                onClick = {
 if(isPaused){
 
 }
                 else {
-    if (viewModel.retrievecurrentPlayer() == 2) {
+    if (viewModel.currentPLayer == 2) {
 viewModel.increaseMove2()
        if(isSoundOn){ mediaPlayer.start()}
        viewModel.incrementTimeForPLayer2()
@@ -344,8 +373,7 @@ viewModel.increaseMove2()
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
-
-
+                .background(color=Color.DarkGray)
         )
         {
 
@@ -364,14 +392,11 @@ Row() {
     Text(
         text = "${viewModel.move2}"
     )
-}
-           }
+} //Move Row
+           }// Time and Moves
+        } // Second Player
 
-
-
-        }
-
-   //Column1 Ends here
+   //Column1 Ends here-> Major Column
     }
 // HomeScreen Function ends here
 }
