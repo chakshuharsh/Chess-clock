@@ -84,6 +84,7 @@ fun formatTime(totalSeconds: Long): String{
 }
 fun resetTimer(){//Never Used
     timerState=timerState.copy(player2Time = selectedTimeInMinutes, player1Time = selectedTimeInMinutes)
+
 }
 suspend fun startPlayer1Time(){
     timerState=timerState.copy(isPlayer1Running=true)
@@ -155,6 +156,7 @@ fun stopGame(){
         isPlayer1Running = false,
         isPlayer2Running = false
     )
+        currentPLayer=1
 
     move1=0
         move2=0

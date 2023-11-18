@@ -266,6 +266,7 @@ isDialogVisible=false
                             onClick = {
                                 viewModel.resetTimers()
                                 isDialogVisible=false
+                                isPaused=false
 
                             }
                         ) {
